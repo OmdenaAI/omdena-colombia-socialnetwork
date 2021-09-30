@@ -23,8 +23,7 @@ def load_data(lang):
     data = data[data["twitter_lang"] == lang]
     sentiments = {
         1: "POS",
-        0: "NEU",
-        -1: "NEG"
+        0: "NEG",
     }
     data["full_text_sentiment"] = data["sentiment_score"].map(sentiments)
     return data
