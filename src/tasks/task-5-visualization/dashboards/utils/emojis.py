@@ -36,7 +36,11 @@ class EmojiCloud:
         return f"hsl({hue_saturation},{opacity}%)"
 
     def generate(self, emojis):
-        emoji_frequencies = Counter(emojis)
+        emoji_frequencies = {}
+        for emoji_list in emojis:
+            for emoji in list(emoji_list):
+                emoji = emoji.strip()
+                emoji_frequencies[emoji] = emoji_frequencies.get(emoji, 0) + 1  
         total_count = len(emojis)
         self.emoji_probability = {emoji: count/total_count for emoji, count in emoji_frequencies.items()}
         wc = self.word_cloud.generate_from_frequencies(emoji_frequencies)
