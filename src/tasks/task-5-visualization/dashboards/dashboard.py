@@ -58,9 +58,6 @@ st.header("Hashtags")
 st.subheader("Hashtags bar race")
 st.video(f"{CURRENT_PATH}/media/both_languages.mp4")
 
-# Tweets per hashtag
-st.sidebar.subheader("Total number of tweets for each hashtag")
-
 hashtags_to_consider = st.slider(
     "Hashtags to look at", 1, min(50, len(hashtag_counts)))
 hashtags = [hashtag for hashtag in hashtag_counts.keys()]
@@ -76,7 +73,7 @@ st.plotly_chart(fig_1)
 # Emojis wordcloud
 st.subheader("Emojis by week")
 weeks_to_consider = st.slider(
-    "Hashtags to look at", 1, int(data["preprocessed_created_at"].dt.week.max()))
+    "Weeks to look at", 1, int(data["preprocessed_created_at"].dt.week.max()))
 emojis = get_emojis_by_week(data, weeks_to_consider)
 st.subheader("Emoji cloud for each week")
 fig, ax = plt.subplots()
