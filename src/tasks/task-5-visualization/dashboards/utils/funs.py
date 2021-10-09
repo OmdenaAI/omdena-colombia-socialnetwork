@@ -41,7 +41,7 @@ def get_hashtag_counts(data):
 
 @st.cache(persist=True,suppress_st_warning=True, allow_output_mutation=True)
 def get_emojicloud():
-    return EmojiCloud(font_path=f"{FONTS_PATH}/Symbola.ttf")
+    return EmojiCloud(font_path=f"{FONTS_PATH}/TwitterColorEmoji-SVGinOT.ttf")
 
 @st.cache(allow_output_mutation=True)
 def get_emojis_by_week(data, weeks: int):
