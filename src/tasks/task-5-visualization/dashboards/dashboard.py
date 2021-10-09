@@ -78,8 +78,7 @@ emojis = get_emojis_by_week(data, weeks_to_consider)
 st.subheader("Emoji cloud for each week")
 fig, ax = plt.subplots()
 wc = emoji_cloud.generate(emojis)
-im = ax.imshow(wc.recolor(color_func=emoji_cloud.color_func, random_state=42),
-                interpolation="bilinear")
+im = ax.imshow(wc,interpolation="bilinear")
 ax.axis("off")
 st.pyplot(fig)
 

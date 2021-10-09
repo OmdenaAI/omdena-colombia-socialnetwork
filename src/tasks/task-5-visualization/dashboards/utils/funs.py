@@ -39,7 +39,7 @@ def get_hashtag_counts(data):
         ans.items(), key=lambda item: item[1], reverse=True)}
     return ans
 
-@st.cache(persist=True)
+@st.cache(persist=True,suppress_st_warning=True, allow_output_mutation=True)
 def get_emojicloud():
     return EmojiCloud(font_path=f"{FONTS_PATH}/Symbola.ttf")
 
