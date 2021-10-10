@@ -1,12 +1,13 @@
 
 import os
+import datetime
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 import matplotlib.pyplot as plt
 from utils.funs import (load_data, get_hashtag_counts,
-                        get_emojicloud, get_emojis_by_week)
+                        get_emojicloud, get_emojis)
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -26,11 +27,14 @@ language = st.sidebar.selectbox(
 'Language',
 ('Spanish', 'English'))
 
-data = load_data(LANGUAGES[language])
+start_date = st.sidebar.date_input( "Start date", value = datetime.date(2021,3,22), min_value=datetime.date(2021,3,22) , max_value=datetime.date(2021,9,4)).isoformat()
+end_date =  st.sidebar.date_input( "End date", value = datetime.date(2021,9,4), min_value=datetime.date(2021,3,22) , max_value=datetime.date(2021,9,4)).isoformat()
+
+data = load_data(LANGUAGES[language], start_date, end_date)
 hashtag_counts = get_hashtag_counts(data)
 emoji_cloud = get_emojicloud()
 
-
+st.header("Tweets")
 
 # Random tweet by sentiment
 st.subheader("Display random tweet")
@@ -71,10 +75,17 @@ fig = px.bar(grouped_data, x="MonthWeek_merged", y=['full_text']
 fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
 st.plotly_chart(fig)
 
+# Emojis wordcloud
+st.subheader("Emoji cloud")
+emojis = get_emojis(data)
+fig, ax = plt.subplots()
+wc = emoji_cloud.generate(emojis)
+im = ax.imshow(wc,interpolation="bilinear")
+ax.axis("off")
+st.pyplot(fig)
 
 
-
-
+st.header("Sentiment")
 # Tweets by sentiment
 st.markdown("### Total Number of tweets by sentiment")
 select = st.selectbox('Type of visualization', [
@@ -92,9 +103,12 @@ else:
     fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
     st.plotly_chart(fig)
 
+st.subheader("Sentiment bar chart race")
+st.video(f"{CURRENT_PATH}/media/sentiment_bcr_{LANGUAGES[language]}.mp4")
+
 st.header("Hashtags")
-st.subheader("Hashtags bar race")
-st.video(f"{CURRENT_PATH}/media/both_languages.mp4")
+st.subheader("Hashtags bar chart race")
+st.video(f"{CURRENT_PATH}/media/hashtag_bcr_{LANGUAGES[language]}.mp4")
 
 hashtags_to_consider = st.slider(
     "Hashtags to look at", 1, min(50, len(hashtag_counts)))
@@ -107,16 +121,4 @@ fig_1 = px.bar(hashtag_sentiment_count, x='Hashtag',
                 y='Tweets', color='Tweets', height=500)
 st.plotly_chart(fig_1)
 
-
-# Emojis wordcloud
-st.subheader("Emojis by week")
-weeks_to_consider = st.slider(
-    "Weeks to look at", 1, int(data["preprocessed_created_at"].dt.week.max()))
-emojis = get_emojis_by_week(data, weeks_to_consider)
-st.subheader("Emoji cloud for each week")
-fig, ax = plt.subplots()
-wc = emoji_cloud.generate(emojis)
-im = ax.imshow(wc,interpolation="bilinear")
-ax.axis("off")
-st.pyplot(fig)
 
