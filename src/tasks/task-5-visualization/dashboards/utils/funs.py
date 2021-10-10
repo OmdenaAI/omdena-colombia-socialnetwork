@@ -98,3 +98,13 @@ def get_all_text(data):
         word_list = eval(word_list)
         ans+=" ".join(word_list) + " "
     return ans 
+
+def get_sentiment_count(data, hashtag):
+    counts = {}
+    for _, row in data.iterrows():
+        if not pd.isna(row["hashtags"]) and hashtag in row["hashtags"]:
+            sentiment = row["full_text_sentiment"]
+            counts[sentiment] = counts.get(sentiment, 0) + 1
+    ans = pd.DataFrame(data={"Sentiment":counts.keys(), "Frequency": counts.values()})
+    return ans
+    

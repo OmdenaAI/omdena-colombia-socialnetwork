@@ -7,7 +7,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from utils.funs import (load_data, get_hashtag_counts,
-                        get_emojicloud, get_emojis, get_map, get_all_text)
+                        get_emojicloud, get_emojis, get_map, get_all_text, get_sentiment_count)
 
 CURRENT_PATH = os.path.dirname(__file__)
 FILES_PATH = "src/data/task-5-visualization"
@@ -205,6 +205,14 @@ if select == 'Bar plot':
 else:
     fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
     st.plotly_chart(fig)
+
+st.subheader("Sentiments by hashtag")
+hashtag = st.selectbox('Select the hashtag: ', list(hashtag_counts.keys())[:50])
+sentiment_count_hashtag = get_sentiment_count(data, hashtag)
+fig = px.bar(sentiment_count_hashtag, x='Sentiment',
+                    y='Frequency', color='Frequency', height=500)
+st.plotly_chart(fig)
+
 
 st.subheader("Sentiment bar chart race")
 st.video(f"{CURRENT_PATH}/media/sentiment_bcr_{LANGUAGES[language]}.mp4")
