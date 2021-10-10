@@ -75,23 +75,23 @@ fig = px.bar(grouped_data, x="MonthWeek_merged", y=['full_text']
 fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
 st.plotly_chart(fig)
 
+col1, col2 = st.columns(2)
 # Emojis wordcloud
-st.subheader("Emoji cloud")
+col1.subheader("Emoji cloud")
 emojis = get_emojis(data)
 fig, ax = plt.subplots()
 wc = emoji_cloud.generate(emojis)
 im = ax.imshow(wc,interpolation="bilinear")
 ax.axis("off")
-st.pyplot(fig)
+col1.pyplot(fig)
 
-st.subheader("Word cloud")
+col2.subheader("Word cloud")
 tweets_text = get_all_text(data)
 fig = plt.figure(figsize = (20, 10))
 img = WordCloud(max_font_size = 100).generate(tweets_text)
 plt.imshow(img, interpolation = 'bilinear')
-plt.title('All tweets wordcloud', fontsize = 50, pad = 20)
 plt.xticks([]); plt.yticks([])
-st.pyplot(fig)
+col2.pyplot(fig)
 
 st.subheader("Tweets map")
 map_fig = get_map(data)
