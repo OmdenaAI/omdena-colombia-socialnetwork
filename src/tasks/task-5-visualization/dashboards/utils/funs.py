@@ -35,6 +35,7 @@ def load_data(lang, start_date, end_date):
         1: "POS",
         0: "NEG",
     }
+    data["favorite_count"] = data["favorite_count"].astype(int)
     data["full_text_sentiment"] = data["sentiment_score"].map(sentiments)
     return data
 

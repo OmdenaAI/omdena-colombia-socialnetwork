@@ -138,6 +138,18 @@ st.markdown(data.query(
     "full_text_sentiment == @random_tweet")[["full_text"]].sample(n=1).iat[0, 0])
 
 
+st.subheader("Top 5 most liked tweets")
+top_5 = data.sort_values(by="favorite_count", ascending=False)[["preprocessed_created_at","full_text","favorite_count","full_text_sentiment"]].head()
+fig = go.Figure(data=[go.Table(
+        header=dict(values=list(top_5.columns),
+                    fill_color='paleturquoise',
+                    align='left'),
+        cells=dict(values=[top_5.preprocessed_created_at, top_5.full_text, top_5.favorite_count, top_5.full_text_sentiment],
+                   fill_color='lavender',
+                   align='left'))
+    ])
+st.plotly_chart(fig)
+
 ###monthly stuff 
 grouped_data = data.groupby(['MonthWeek_merged']).aggregate({
                                     'favorite_count':'sum','sentiment_score':'mean','full_text':'nunique'}).reset_index()
