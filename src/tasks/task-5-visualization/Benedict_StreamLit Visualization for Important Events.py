@@ -2,15 +2,13 @@
 
 
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import seaborn as sns
-import numpy as np
 import datetime
 import streamlit as st
 
-event_df = pd.read_csv('event_df.csv')
-high_event_df = pd.read_csv('high_event_df.csv')
+FILES_PATH = "src/data/task-5-visualization"
+
+event_df = pd.read_csv(f'{FILES_PATH}/event_df.csv')
+high_event_df = pd.read_csv(f'{FILES_PATH}/high_event_df.csv')
 
 choice = st.selectbox('Select your preference: ', ['Time Range', 'Singular Date'])
 
