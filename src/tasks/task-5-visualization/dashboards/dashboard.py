@@ -142,10 +142,8 @@ st.subheader("Top 5 most liked tweets")
 top_5 = data.sort_values(by="favorite_count", ascending=False)[["preprocessed_created_at","full_text","favorite_count","full_text_sentiment"]].head()
 fig = go.Figure(data=[go.Table(
         header=dict(values=list(top_5.columns),
-                    fill_color='paleturquoise',
                     align='left'),
         cells=dict(values=[top_5.preprocessed_created_at, top_5.full_text, top_5.favorite_count, top_5.full_text_sentiment],
-                   fill_color='lavender',
                    align='left'))
     ])
 st.plotly_chart(fig)
