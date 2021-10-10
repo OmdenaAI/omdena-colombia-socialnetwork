@@ -82,7 +82,7 @@ def get_map(tweets):
     #Map
     px.set_mapbox_access_token("pk.eyJ1IjoiYW5hbGlhMjAyMCIsImEiOiJja3VnbXdpdmcyNWZmMm9uenpsMHVqazM0In0.Q5WfRGaOgxlgJ59yDJiqWw")# Create an account in Map Box, this website allows us to plot better map, We can identify small places not only big cities.
     #Plot the map with plotly library
-    fig = px.scatter_mapbox(data, lat="latitude", lon="longitude", color="Tweets_%",hover_name="city", size="Tweets_%",color_continuous_scale=px.colors.sequential.Viridis, zoom=5, height=800, center={"lat":4.5709, "lon":-74.2973})
+    fig = px.scatter_mapbox(data, lat="latitude", lon="longitude", color="Tweets_%",hover_name="city", size="Tweets_%",color_continuous_scale=px.colors.sequential.Viridis, zoom=5, height=800, center={"lat":4.5709, "lon":-74.2973}, width=1200)
     fig.update_layout(
         title="Colombia Strike 2021: Tweets",
         font=dict(

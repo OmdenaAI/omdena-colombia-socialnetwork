@@ -12,8 +12,7 @@ class EmojiCloud:
 
     def initialize_wordcloud(self):
         word_cloud = WordCloud(font_path=self.font_path,
-                               width=2000,
-                               height=1000,
+                               max_font_size = 100, 
                                background_color='black',
                                random_state=42,
                                collocations=False)

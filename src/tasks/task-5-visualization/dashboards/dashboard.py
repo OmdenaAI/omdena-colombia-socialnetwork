@@ -18,7 +18,7 @@ LANGUAGES = {
     "Spanish": "es",
     "English": "en"
 }
-
+st.set_page_config(layout="wide")
 st.title("Colombia social network analysis during strike")
 st.markdown("-by Omdena")
 st.sidebar.title("Sentiment Analysis of Tweets/Reddit messages")
@@ -145,7 +145,7 @@ fig = go.Figure(data=[go.Table(
                     align='left'),
         cells=dict(values=[top_5.preprocessed_created_at, top_5.full_text, top_5.favorite_count, top_5.full_text_sentiment],
                    align='left'))
-    ])
+    ], layout=go.Layout(height=800, width=1200))
 st.plotly_chart(fig)
 
 ###monthly stuff 
@@ -159,7 +159,7 @@ grouped_data["MW"]= new[1]
 
 
 # fig = go.Figure()
-fig = px.line(grouped_data, x='MonthWeek_merged', y=['favorite_count','full_text']
+fig = px.line(grouped_data, x='MonthWeek_merged', y=['favorite_count','full_text'],  height=400, width=1200
              )
 # fig.add_trace(go.Scatter(
 #                         #x = cust["Original x-axis"], 
@@ -175,7 +175,7 @@ st.plotly_chart(fig)
 
 
 fig = px.bar(grouped_data, x="MonthWeek_merged", y=['full_text']
-             , color='sentiment_score', color_continuous_scale=px.colors.sequential.Viridis)
+             , color='sentiment_score', color_continuous_scale=px.colors.sequential.Viridis,  height=400, width=1200)
 
 fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
 st.plotly_chart(fig)
@@ -214,17 +214,17 @@ sentiment_count = pd.DataFrame(
 st.markdown("### Number of tweets by sentiment")
 if select == 'Bar plot':
     fig = px.bar(sentiment_count, x='Sentiment',
-                    y='Tweets', color='Tweets', height=500, color_continuous_scale=px.colors.sequential.Viridis)
+                    y='Tweets', color='Tweets', height=500, width=1200, color_continuous_scale=px.colors.sequential.Viridis)
     st.plotly_chart(fig)
 else:
-    fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
+    fig = px.pie(sentiment_count, values='Tweets', names='Sentiment', height=500, width=1200)
     st.plotly_chart(fig)
 
 st.subheader("Sentiments by hashtag")
 hashtag = st.selectbox('Select the hashtag: ', list(hashtag_counts.keys())[:50])
 sentiment_count_hashtag = get_sentiment_count(data, hashtag)
 fig = px.bar(sentiment_count_hashtag, x='Sentiment',
-                    y='Frequency', color='Frequency', height=500, color_continuous_scale=px.colors.sequential.Viridis)
+                    y='Frequency', color='Frequency', height=500, width=1200, color_continuous_scale=px.colors.sequential.Viridis)
 st.plotly_chart(fig)
 
 
@@ -243,7 +243,7 @@ hashtag_sentiment_count = pd.DataFrame(
     {'Hashtag': hashtags[:hashtags_to_consider], 'Tweets': tweets[:hashtags_to_consider]})
 st.subheader("Total number of tweets for each hashtag")
 fig_1 = px.bar(hashtag_sentiment_count, x='Hashtag',
-                y='Tweets', color='Tweets', height=500, color_continuous_scale=px.colors.sequential.Viridis)
+                y='Tweets', color='Tweets', height=500, width=1200, color_continuous_scale=px.colors.sequential.Viridis)
 st.plotly_chart(fig_1)
 
 
@@ -270,7 +270,7 @@ fig = go.Figure(data = [go.Parcats(dimensions=[ topic_dim, sentiment_dim],
         hoveron='color', hoverinfo='count+probability',
         labelfont={'size': 18, 'family': 'Times'},
         tickfont={'size': 16, 'family': 'Times'},
-        arrangement='freeform')])
+        arrangement='freeform')], layout=go.Layout(height=800, width=1200))
 
 st.plotly_chart(fig)
 
