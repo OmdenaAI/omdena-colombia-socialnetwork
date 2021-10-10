@@ -3,11 +3,11 @@ import os
 import datetime
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 from utils.funs import (load_data, get_hashtag_counts,
-                        get_emojicloud, get_emojis, get_map)
+                        get_emojicloud, get_emojis, get_map, get_all_text)
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -70,7 +70,7 @@ st.plotly_chart(fig)
 
 
 fig = px.bar(grouped_data, x="MonthWeek_merged", y=['full_text']
-             , color='sentiment_score')
+             , color='sentiment_score', color_continuous_scale=px.colors.sequential.Viridis)
 
 fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
 st.plotly_chart(fig)
@@ -82,6 +82,15 @@ fig, ax = plt.subplots()
 wc = emoji_cloud.generate(emojis)
 im = ax.imshow(wc,interpolation="bilinear")
 ax.axis("off")
+st.pyplot(fig)
+
+st.subheader("Word cloud")
+tweets_text = get_all_text(data)
+fig = plt.figure(figsize = (20, 10))
+img = WordCloud(max_font_size = 100).generate(tweets_text)
+plt.imshow(img, interpolation = 'bilinear')
+plt.title('All tweets wordcloud', fontsize = 50, pad = 20)
+plt.xticks([]); plt.yticks([])
 st.pyplot(fig)
 
 st.subheader("Tweets map")
@@ -100,7 +109,7 @@ sentiment_count = pd.DataFrame(
 st.markdown("### Number of tweets by sentiment")
 if select == 'Bar plot':
     fig = px.bar(sentiment_count, x='Sentiment',
-                    y='Tweets', color='Tweets', height=500)
+                    y='Tweets', color='Tweets', height=500, color_continuous_scale=px.colors.sequential.Viridis)
     st.plotly_chart(fig)
 else:
     fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
@@ -114,14 +123,14 @@ st.subheader("Hashtags bar chart race")
 st.video(f"{CURRENT_PATH}/media/hashtag_bcr_{LANGUAGES[language]}.mp4")
 
 hashtags_to_consider = st.slider(
-    "Hashtags to look at", 1, min(50, len(hashtag_counts)))
+    "Hashtags to look at", 5, min(50, len(hashtag_counts)))
 hashtags = [hashtag for hashtag in hashtag_counts.keys()]
 tweets = [hashtag for hashtag in hashtag_counts.values()]
 hashtag_sentiment_count = pd.DataFrame(
     {'Hashtag': hashtags[:hashtags_to_consider], 'Tweets': tweets[:hashtags_to_consider]})
 st.subheader("Total number of tweets for each hashtag")
 fig_1 = px.bar(hashtag_sentiment_count, x='Hashtag',
-                y='Tweets', color='Tweets', height=500)
+                y='Tweets', color='Tweets', height=500, color_continuous_scale=px.colors.sequential.Viridis)
 st.plotly_chart(fig_1)
 
 

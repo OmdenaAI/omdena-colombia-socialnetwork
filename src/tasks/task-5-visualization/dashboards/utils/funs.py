@@ -91,3 +91,10 @@ def get_map(tweets):
         )
     )
     return fig
+
+def get_all_text(data): 
+    ans = ""
+    for word_list in data["preprocessed_data_without_hashtags"]:
+        word_list = eval(word_list)
+        ans+=" ".join(word_list) + " "
+    return ans 
