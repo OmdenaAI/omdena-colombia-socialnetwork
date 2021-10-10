@@ -38,6 +38,8 @@ emoji_cloud = get_emojicloud()
 
 event_df = pd.read_csv(f'{FILES_PATH}/event_df.csv')
 high_event_df = pd.read_csv(f'{FILES_PATH}/high_event_df.csv')
+topic_data = pd.read_csv(f"{FILES_PATH}//Corrected_Final_All_sentiment_topics.csv")
+topics = pd.read_csv(f"{FILES_PATH}//topic_df.csv", index_col="Topic Number")
 
 st.header("Important dates")
 
@@ -211,7 +213,7 @@ st.subheader("Sentiments by hashtag")
 hashtag = st.selectbox('Select the hashtag: ', list(hashtag_counts.keys())[:50])
 sentiment_count_hashtag = get_sentiment_count(data, hashtag)
 fig = px.bar(sentiment_count_hashtag, x='Sentiment',
-                    y='Frequency', color='Frequency', height=500)
+                    y='Frequency', color='Frequency', height=500, color_continuous_scale=px.colors.sequential.Viridis)
 st.plotly_chart(fig)
 
 
@@ -238,11 +240,9 @@ st.plotly_chart(fig_1)
 
 ####Topic Modelling Style Chart
 
+st.header("Topics")
 
-
-TOPIC_FILES_PATH = "src/data/task-5-visualization"
-topic_data = pd.read_csv(f"{TOPIC_FILES_PATH}//Corrected_Final_All_sentiment_topics.csv")
-
+st.table(topics)
 topic_dim = go.parcats.Dimension(values=topic_data.Dominant_Topic, label="Topic")
 
 sentiment_dim = go.parcats.Dimension(
