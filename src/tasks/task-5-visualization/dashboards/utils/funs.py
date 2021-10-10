@@ -20,6 +20,9 @@ def load_data(lang):
     data = pd.read_csv(FILE_PATH)
     data['preprocessed_created_at'] = pd.to_datetime(
         data['preprocessed_created_at'])
+    data['Month'] = data.preprocessed_created_at.dt.month.astype(str) #+'_'+ data.preprocessed_created_at.dt.month_name()
+    data['Weeknum']  = data.preprocessed_created_at.apply(lambda d: (d.day-1) // 7 + 1)
+    data['MonthWeek_merged'] = data['Month'] + ' ' + data.Weeknum.astype(str) 
     data = data[data["twitter_lang"] == lang]
     sentiments = {
         1: "POS",

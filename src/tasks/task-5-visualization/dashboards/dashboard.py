@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 import matplotlib.pyplot as plt
 from utils.funs import (load_data, get_hashtag_counts,
@@ -36,6 +37,43 @@ st.subheader("Display random tweet")
 random_tweet = st.radio('Sentiment', ('POS', 'NEG'))
 st.markdown(data.query(
     "full_text_sentiment == @random_tweet")[["full_text"]].sample(n=1).iat[0, 0])
+
+
+###monthly stuff 
+grouped_data = data.groupby(['MonthWeek_merged']).aggregate({
+                                    'favorite_count':'sum','sentiment_score':'mean','full_text':'nunique'}).reset_index()
+
+grouped_data.sentiment_score = grouped_data.sentiment_score.apply(lambda x: x*100)
+new = grouped_data["MonthWeek_merged"].str.split(" ", n = 1, expand = True)
+grouped_data["Month_Num"]= new[0]
+grouped_data["MW"]= new[1]
+
+
+# fig = go.Figure()
+fig = px.line(grouped_data, x='MonthWeek_merged', y=['favorite_count','full_text']
+             )
+# fig.add_trace(go.Scatter(
+#                         #x = cust["Original x-axis"], 
+#                         x = [grouped_data["Month_Num"],grouped_data["MW"]],
+#                       y = grouped_data['favorite_count'], mode = "lines"))
+# # ,grouped_data['full_text']
+# fig.add_trace(go.Scatter(
+#                         #x = cust["Original x-axis"], 
+#                         x = [grouped_data["Month_Num"],grouped_data["MW"]],
+#                       y = grouped_data['full_text'], mode = "lines"))   
+fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
+st.plotly_chart(fig)
+
+
+fig = px.bar(grouped_data, x="MonthWeek_merged", y=['full_text']
+             , color='sentiment_score')
+
+fig.update_layout(barmode = 'stack', xaxis={'categoryorder':'category ascending'},xaxis_tickangle=-45)  
+st.plotly_chart(fig)
+
+
+
+
 
 # Tweets by sentiment
 st.markdown("### Total Number of tweets by sentiment")
