@@ -2,6 +2,7 @@
 import os
 import datetime
 import pandas as pd
+import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -223,5 +224,35 @@ st.subheader("Total number of tweets for each hashtag")
 fig_1 = px.bar(hashtag_sentiment_count, x='Hashtag',
                 y='Tweets', color='Tweets', height=500, color_continuous_scale=px.colors.sequential.Viridis)
 st.plotly_chart(fig_1)
+
+
+
+
+####Topic Modelling Style Chart
+
+
+
+TOPIC_FILES_PATH = "src/data/task-5-visualization"
+topic_data = pd.read_csv(f"{TOPIC_FILES_PATH}//Corrected_Final_All_sentiment_topics.csv")
+
+topic_dim = go.parcats.Dimension(values=topic_data.Dominant_Topic, label="Topic")
+
+sentiment_dim = go.parcats.Dimension(
+    values=topic_data.sentiment_score, label="Sentiment", categoryarray=[0,1],
+    ticktext=['Negative', 'Positive']
+)
+
+# Create parcats trace
+color = topic_data.sentiment_score
+colorscale = [[0, 'firebrick'], [1, 'mediumseagreen']];
+
+fig = go.Figure(data = [go.Parcats(dimensions=[ topic_dim, sentiment_dim],
+        line={'color': color, 'colorscale': colorscale},
+        hoveron='color', hoverinfo='count+probability',
+        labelfont={'size': 18, 'family': 'Times'},
+        tickfont={'size': 16, 'family': 'Times'},
+        arrangement='freeform')])
+
+st.plotly_chart(fig)
 
 
