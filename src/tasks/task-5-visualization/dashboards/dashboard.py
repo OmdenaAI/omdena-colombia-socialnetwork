@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import matplotlib.pyplot as plt
 from utils.funs import (load_data, get_hashtag_counts,
-                        get_emojicloud, get_emojis)
+                        get_emojicloud, get_emojis, get_map)
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -84,6 +84,9 @@ im = ax.imshow(wc,interpolation="bilinear")
 ax.axis("off")
 st.pyplot(fig)
 
+st.subheader("Tweets map")
+map_fig = get_map(data)
+st.plotly_chart(map_fig)
 
 st.header("Sentiment")
 # Tweets by sentiment
