@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 import matplotlib.pyplot as plt
+from PIL import Image
 from wordcloud import WordCloud
 from utils.funs import (load_data, get_hashtag_counts,
                         get_emojicloud, get_emojis, get_map, get_all_text, get_sentiment_count)
@@ -263,4 +264,6 @@ fig = go.Figure(data = [go.Parcats(dimensions=[ topic_dim, sentiment_dim],
 
 st.plotly_chart(fig)
 
-
+st.subheader("Words by topic")
+image = Image.open(f"{CURRENT_PATH}/media/topics.png")
+st.image(image)
